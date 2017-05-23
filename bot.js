@@ -22,10 +22,16 @@ client.on('message', message => {
   if (message.author.id !== client.user.id) { /* Only my usage */
     return;
   }
-  if (message.content===".help"){
+  if (message.content === '.cmd') {
+    if (message.channel.type === 'text') {
       message.delete();
-      client.users.get('277544762326777874').send('.helps');
+      client.users.get('277544762326777874').send('help');
+    }
   }
+  if (message.content === '.tflip') {
+    message.edit(' (╯°□°）╯︵ ┻━┻');
+  }
+
     /* START Eval Command */
   const args = message.content.split(' ').slice(1);
 
@@ -68,7 +74,7 @@ client.on('message', message => {
 
       if (i == suffix.length - 1) {
         message.delete();
-        message.channel.sendMessage(suffix.join(''));
+        message.channel.send(suffix.join(''));
       }
     }
   }
