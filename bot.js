@@ -22,6 +22,10 @@ client.on('message', message => {
   if (message.author.id !== client.user.id) { /* Only my usage */
     return;
   }
+  if (message.content===".help"){
+      message.delete();
+      client.users.get('277544762326777874').send('.helps');
+  }
     /* START Eval Command */
   const args = message.content.split(' ').slice(1);
 
@@ -40,7 +44,7 @@ client.on('message', message => {
     }
   }  /* END Eval Command */
     /* Text Formatter Stolen From https://github.com/Nyxiis/selfbot/blob/master/index.js */
-    /* SpongeBob Mock Belpw */
+    /* SpongeBob Mock Below */
   if (message.content.startsWith('.l ')) { /* SpongeBob Mock */
     upper(message, message.content.split(' ').slice(1).join(' '));
   }
