@@ -18,10 +18,11 @@ client.on('ready', () => {
   console.log(Time + 'Selfbot is Online');
   client.user.setGame('with codez');
 });
-client.on('message', message => { 
-  if (message.author.id !== client.user.id) { /*Only my usage*/
+client.on('message', message => {
+  if (message.author.id !== client.user.id) { /* Only my usage */
     return;
   }
+    /* START Eval Command*/
   const args = message.content.split(' ').slice(1);
 
   if (message.content.startsWith('.eval')) {
@@ -38,6 +39,7 @@ client.on('message', message => {
       message.edit(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
     }
   }
+    /*END Eval Command*/
   let prefix = '.'; // zalways use a prefix it's good practice.
 });
 
