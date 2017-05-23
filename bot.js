@@ -22,7 +22,7 @@ client.on('message', message => {
   if (message.author.id !== client.user.id) { /* Only my usage */
     return;
   }
-    /* START Eval Command*/
+    /* START Eval Command */
   const args = message.content.split(' ').slice(1);
 
   if (message.content.startsWith('.eval')) {
@@ -38,8 +38,34 @@ client.on('message', message => {
     } catch (err) {
       message.edit(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
     }
+  }  /* END Eval Command */
+    /* Text Formatter Stolen From https://github.com/Nyxiis/selfbot/blob/master/index.js */
+    /* SpongeBob Mock Belpw */
+  if (message.content.startsWith('.l ')) { /* SpongeBob Mock */
+    upper(message, message.content.split(' ').slice(1).join(' '));
   }
-    /*END Eval Command*/
-  let prefix = '.'; // zalways use a prefix it's good practice.
-});
 
+  function upper(message, suffix) {
+    suffix = suffix.toLowerCase();
+    suffix = suffix.split('');
+
+    var on = 1;
+
+    var i = 0;
+
+    for (i = 0; i <= suffix.length - 1; i++) {
+      if (on == 1 && suffix[i] != ' ') {
+        suffix[i] = suffix[i].toLowerCase();
+        on = 2;
+      } else if (on == 2 && suffix[i] != ' ') {
+        suffix[i] = suffix[i].toUpperCase();
+        on = 1;
+      }
+
+      if (i == suffix.length - 1) {
+        message.delete();
+        message.channel.sendMessage(suffix.join(''));
+      }
+    }
+  }
+});
