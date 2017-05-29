@@ -10,14 +10,6 @@ const lmgtfy = require('lmgtfy');
 
 const urban = require('relevant-urban');
 
-<<<<<<< HEAD
-=======
-const clean = text => {
-  if (typeof (text) === 'string') {
-    return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));
-  }
-  return text;
-};
 
 const tflip = {
   title: 'Coin Flipped',
@@ -35,15 +27,14 @@ const ctflip = {
     url: 'http://i.imgur.com/tXZhmts.pngg'
   }
 };
->>>>>>> refs/remotes/origin/master
+
 client.login(config.token);
 
 client.on('ready', () => {
   console.log(chalk.cyan(Time + chalk.green('Selfbot is Online')));
 });
 client.on('message', message => {
-<<<<<<< HEAD
-=======
+
   if (message.author.id !== client.user.id) { /* Only my usage */
     return;
   }
@@ -53,12 +44,11 @@ client.on('message', message => {
   if (message.content === '>coinflip') {
     getRandomInt();
     if (getRandomInt(1)) {
-      message.edit({embed: ctflip});
+      message.channel.send({embed: ctflip});
     } else {
-      message.edit({embed: tflip});
+      message.channel.send({embed: tflip});
     }
   }
->>>>>>> refs/remotes/origin/master
   const duration = moment(client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
   if (message.content === config.prefix + 'stat') {
     message.edit(`= STATISTICS =
