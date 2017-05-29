@@ -2,7 +2,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
-
 const moment = require('moment');
 const Time = moment().format('MMM D| h:mm:ss | ');
 
@@ -18,6 +17,22 @@ const clean = text => {
   return text;
 };
 
+const tflip = {
+  title: 'Coin Flipped',
+  description: 'It\'s Tails',
+  color: 15467544,
+  thumbnail: {
+    url: 'http://i.imgur.com/HHrAxbH.png'
+  }
+};
+const ctflip = {
+  title: 'Coin Flipped',
+  description: 'It\'s Heads',
+  color: 3700184,
+  thumbnail: {
+    url: 'http://i.imgur.com/tXZhmts.pngg'
+  }
+};
 client.login(config.token);
 
 client.on('ready', () => {
@@ -27,7 +42,17 @@ client.on('message', message => {
   if (message.author.id !== client.user.id) { /* Only my usage */
     return;
   }
-
+  function getRandomInt() {
+    return Math.round(Math.random());
+  }
+  if (message.content === '>coinflip') {
+    getRandomInt();
+    if (getRandomInt(1)) {
+      message.edit({embed: ctflip});
+    } else {
+      message.edit({embed: tflip});
+    }
+  }
   const duration = moment(client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
   if (message.content === '>stat') {
     message.edit(`= STATISTICS =
