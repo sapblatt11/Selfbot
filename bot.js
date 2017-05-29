@@ -41,7 +41,7 @@ client.on('message', message => {
   function getRandomInt() {
     return Math.round(Math.random());
   }
-  if (message.content === '>coinflip') {
+  if (message.content === config.prefix + 'coinflip') {
     getRandomInt();
     if (getRandomInt(1)) {
       message.channel.send({embed: ctflip});
