@@ -35,9 +35,7 @@ client.on('ready', () => {
 });
 client.on('message', message => {
 
-  if (message.author.id !== client.user.id) { /* Only my usage */
-    return;
-  }
+
   function getRandomInt() {
     return Math.round(Math.random());
   }
@@ -98,7 +96,7 @@ client.on('message', message => {
       console.log(chalk.yellow(Time) + chalk.green('Ping\'d'));
     });
   }
-  if (message.content.startsWith(config + 'lmgtfy')) {
+  if (message.content.startsWith(config.prefix + 'lmgtfy')) {
     let args = message.content.split(' ').slice(1);
     let pop = args.join(' ');
     let op = lmgtfy(pop);
