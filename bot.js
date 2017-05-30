@@ -5,8 +5,12 @@ const config = require('./config.json');
 const moment = require('moment');
 const Time = moment().format('MMM D| h:mm:ss | ');
 
+
 const chalk = require('chalk');
 const lmgtfy = require('lmgtfy');
+
+const sql = require('sqlite');
+sql.open('./mlog.sqlite');
 
 const urban = require('relevant-urban');
 
@@ -39,12 +43,30 @@ client.on('ready', () => {
   console.log(chalk.cyan(Time + chalk.green('Selfbot is Online')));
 });
 client.on('message', message => {
+     if (message.guild.id === "222078108977594368"){
+        if (message.content.includes('help')){
+            if (!message.guild.id === '222078108977594368') return;
+
+      sql.run('INSERT INTO mlog (userId, content, name) VALUES (?, ?, ?)', [message.author.id, message.content, message.author.username]);
+      console.log((chalk.yellow(Time)) + 'Inserted User Added')
+ /*.catch(() => {
+    console.error;
+    sql.run('CREATE TABLE IF NOT EXISTS mlog (userId TEXT, content TEXT, name TEXT)').then(() => {
+      console.log((chalk.yellow(Time)) +'Made Table');
+      sql.run('INSERT INTO mlog (userId, content, name) VALUES (?, ?, ?)', [message.author.id, message.content, message.author.username]);
+        
+    });
+  });*/
+    }
+}
+
   if (message.author.id !== client.user.id) { /* Only my usage */
     return;
   }
   function getRandomInt() {
     return Math.round(Math.random());
   }
+
   if (message.content === '>coinflip') {
     getRandomInt();
     if (getRandomInt(1)) {
@@ -70,7 +92,15 @@ client.on('message', message => {
 • Channels   :: ${client.channels.size.toLocaleString()}
 • Discord.js :: v${Discord.version}`);
   }
-
+    
+  if (message.content === '>help count') {
+                                                         
+      let hcount = sql.get('SELECT Count(*) FROM mlog').then(r =>{
+    hcount = r; 
+          console.log(r);
+     
+      message.edit('Help has been said ' + r['Count(*)'] + ' times since 5/29/2017');
+  })};
   if (message.content === '>cmd') {
     if (message.channel.type === 'text') {
       message.delete();
@@ -154,6 +184,7 @@ client.on('message', message => {
         console.log(chalk.yellow(Time) + chalk.green('Prune\'d ' + chalk.magenta(params)));
       });
   }
+
 });
 
 function upper(message, suffix) {
