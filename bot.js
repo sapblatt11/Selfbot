@@ -5,7 +5,6 @@ const config = require('./config.json');
 const moment = require('moment');
 const Time = moment().format('MMM D| h:mm:ss | ');
 
-
 const chalk = require('chalk');
 const lmgtfy = require('lmgtfy');
 
@@ -43,22 +42,24 @@ client.on('ready', () => {
   console.log(chalk.cyan(Time + chalk.green('Selfbot is Online')));
 });
 client.on('message', message => {
-     if (message.guild.id === "222078108977594368"){
-        if (message.content.includes('help')){
-            if (!message.guild.id === '222078108977594368') return;
+  if (message.guild.id === '222078108977594368') {
+    if (message.content.includes('help'.toLowerCase())) {
+      if (!message.guild.id === '222078108977594368') {
+        return;
+      }
 
       sql.run('INSERT INTO mlog (userId, content, name) VALUES (?, ?, ?)', [message.author.id, message.content, message.author.username]);
-      console.log((chalk.yellow(Time)) + 'Inserted User Added')
- /*.catch(() => {
+      console.log(chalk.yellow('Inserted User Added'));
+ /* .catch(() => {
     console.error;
     sql.run('CREATE TABLE IF NOT EXISTS mlog (userId TEXT, content TEXT, name TEXT)').then(() => {
       console.log((chalk.yellow(Time)) +'Made Table');
       sql.run('INSERT INTO mlog (userId, content, name) VALUES (?, ?, ?)', [message.author.id, message.content, message.author.username]);
-        
+
     });
-  });*/
+  }); */
     }
-}
+  }
 
   if (message.author.id !== client.user.id) { /* Only my usage */
     return;
@@ -66,7 +67,10 @@ client.on('message', message => {
   function getRandomInt() {
     return Math.round(Math.random());
   }
-
+    
+  if (message.content === '>pf'){
+      
+  }
   if (message.content === '>coinflip') {
     getRandomInt();
     if (getRandomInt(1)) {
@@ -92,15 +96,14 @@ client.on('message', message => {
 • Channels   :: ${client.channels.size.toLocaleString()}
 • Discord.js :: v${Discord.version}`);
   }
-    
+
   if (message.content === '>help count') {
-                                                         
-      let hcount = sql.get('SELECT Count(*) FROM mlog').then(r =>{
-    hcount = r; 
-          console.log(r);
-     
+    let hcount = sql.get('SELECT Count(*) FROM mlog').then(r => {
+      hcount = r;
+
       message.edit('Help has been said ' + r['Count(*)'] + ' times since 5/29/2017');
-  })};
+    });
+  }
   if (message.content === '>cmd') {
     if (message.channel.type === 'text') {
       message.delete();
@@ -158,6 +161,22 @@ client.on('message', message => {
       message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
     }
   }  /* END Eval Command */
+     /* START Exec Command */
+  if (message.content.startsWith('>exec')) {
+    try {
+      const code = args.join(' ');
+      let execed = exec(code);
+
+      if (typeof execed !== 'string') {
+        execed = require('util').inspect(execed);
+      }
+
+      message.edit('Input :envelope_with_arrow: :\n' + '```js\n' + code + '```' + '\n\n' + 'Output: :mailbox_with_no_mail: \n' + '```fix\n' + clean(execed) + '```');
+      console.log(chalk.yellow(Time) + chalk.green('Eval\'d ' + chalk.magenta(code)));
+    } catch (err) {
+      message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+    }
+  }
     /* Text Formatter Stolen From https://github.com/Nyxiis/selfbot/blob/master/index.js */
     /* SpongeBob Mock Below */
   if (message.content.startsWith('>leet ')) { /* SpongeBob Mock */
@@ -184,7 +203,6 @@ client.on('message', message => {
         console.log(chalk.yellow(Time) + chalk.green('Prune\'d ' + chalk.magenta(params)));
       });
   }
-
 });
 
 function upper(message, suffix) {
