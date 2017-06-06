@@ -64,14 +64,6 @@ client.on('message', message => {
   if (message.author.id !== client.user.id) { /* Only my usage */
     return;
   }
-    let margs = message.content.split(' ');
-     if (message.content.startsWith('>quote')) {
-        
-message.channel.fetchMessage(margs[1]).then(r => {console.log(r.content)
-                                            message.delete();
-                                  message.channel.send(r.content)})
-  .catch(console.error);
-     }
   function getRandomInt() {
     return Math.round(Math.random());
   }
@@ -152,7 +144,7 @@ message.channel.fetchMessage(margs[1]).then(r => {console.log(r.content)
     console.log(chalk.yellow(Time) + chalk.green('Exec\'d lmgtfy (' + chalk.magenta(pop) + ')'));
   }
     /* START Eval Command */
-  let args = message.content.split(' ').slice(1);
+  const args = message.content.split(' ').slice(1);
 
   if (message.content.startsWith('>eval')) {
     try {
@@ -185,7 +177,8 @@ message.channel.fetchMessage(margs[1]).then(r => {console.log(r.content)
       message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
     }
   }
-    /* Text Formatter Stolen From https://github.com/Nyxiis/selfbot/blob/master/index.js b Mock Below */
+    /* Text Formatter Stolen From https://github.com/Nyxiis/selfbot/blob/master/index.js */
+    /* SpongeBob Mock Below */
   if (message.content.startsWith('>leet ')) { /* SpongeBob Mock */
     upper(message, message.content.split(' ').slice(1).join(' '));
     console.log(chalk.yellow(Time) + chalk.green('Exectued Meme Text'));
@@ -201,8 +194,11 @@ message.channel.fetchMessage(margs[1]).then(r => {console.log(r.content)
     })
       .then(messages => {
         let msg_array = messages.array();
+        // filter the message to only your own
         msg_array = msg_array.filter(m => m.author.id === client.user.id);
+        // limit to the requested number + 1 for the command message
         msg_array.length = messagecount + 1;
+        // Has to delete messages individually. Cannot use `deleteMessages()` on selfbots.
         msg_array.map(m => m.delete().catch(console.error));
         console.log(chalk.yellow(Time) + chalk.green('Prune\'d ' + chalk.magenta(params)));
       });
