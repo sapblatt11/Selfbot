@@ -20,65 +20,27 @@ const clean = text => {
   return text;
 };
 
-const tflip = {
-  title: 'Coin Flipped',
-  description: 'It\'s Tails',
-  color: 15467544,
-  thumbnail: {
-    url: 'http://i.imgur.com/HHrAxbH.png'
-  }
-};
-const ctflip = {
-  title: 'Coin Flipped',
-  description: 'It\'s Heads',
-  color: 3700184,
-  thumbnail: {
-    url: 'http://i.imgur.com/tXZhmts.pngg'
-  }
-};
 client.login(config.token);
 
 client.on('ready', () => {
   console.log(chalk.cyan(Time + chalk.green('Selfbot is Online')));
 });
-client.on('message', message => {
-  if (message.guild.id === '222078108977594368') {
-    if (message.content.includes('help'.toLowerCase())) {
-      if (!message.guild.id === '222078108977594368') {
-        return;
-      }
-
-      sql.run('INSERT INTO mlog (userId, content, name) VALUES (?, ?, ?)', [message.author.id, message.content, message.author.username]);
-      console.log(chalk.yellow('Inserted User Added'));
- /* .catch(() => {
-    console.error;
-    sql.run('CREATE TABLE IF NOT EXISTS mlog (userId TEXT, content TEXT, name TEXT)').then(() => {
-      console.log((chalk.yellow(Time)) +'Made Table');
-      sql.run('INSERT INTO mlog (userId, content, name) VALUES (?, ?, ?)', [message.author.id, message.content, message.author.username]);
-
-    });
-  }); */
-    }
-  }
 
   if (message.author.id !== client.user.id) { /* Only my usage */
     return;
   }
+    let margs = message.content.split(' ');
+     if (message.content.startsWith('>quote')) {
+
+message.channel.fetchMessage(margs[1]).then(r => {console.log(r.content)
+                                            message.delete();
+                                  message.channel.send(r.content)})
+  .catch(console.error);
+     }
   function getRandomInt() {
     return Math.round(Math.random());
   }
-    
-  if (message.content === '>pf'){
-      
-  }
-  if (message.content === '>coinflip') {
-    getRandomInt();
-    if (getRandomInt(1)) {
-      message.edit({embed: ctflip});
-    } else {
-      message.edit({embed: tflip});
-    }
-  }
+
   const duration = moment(client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
   if (message.content === '>stat') {
     message.edit(`= STATISTICS =
@@ -97,13 +59,6 @@ client.on('message', message => {
 • Discord.js :: v${Discord.version}`);
   }
 
-  if (message.content === '>help count') {
-    let hcount = sql.get('SELECT Count(*) FROM mlog').then(r => {
-      hcount = r;
-
-      message.edit('Help has been said ' + r['Count(*)'] + ' times since 5/29/2017');
-    });
-  }
   if (message.content === '>cmd') {
     if (message.channel.type === 'text') {
       message.delete();
@@ -144,7 +99,7 @@ client.on('message', message => {
     console.log(chalk.yellow(Time) + chalk.green('Exec\'d lmgtfy (' + chalk.magenta(pop) + ')'));
   }
     /* START Eval Command */
-  const args = message.content.split(' ').slice(1);
+  let args = message.content.split(' ').slice(1);
 
   if (message.content.startsWith('>eval')) {
     try {
@@ -161,24 +116,8 @@ client.on('message', message => {
       message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
     }
   }  /* END Eval Command */
-     /* START Exec Command */
-  if (message.content.startsWith('>exec')) {
-    try {
-      const code = args.join(' ');
-      let execed = exec(code);
 
-      if (typeof execed !== 'string') {
-        execed = require('util').inspect(execed);
-      }
-
-      message.edit('Input :envelope_with_arrow: :\n' + '```js\n' + code + '```' + '\n\n' + 'Output: :mailbox_with_no_mail: \n' + '```fix\n' + clean(execed) + '```');
-      console.log(chalk.yellow(Time) + chalk.green('Eval\'d ' + chalk.magenta(code)));
-    } catch (err) {
-      message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
-    }
-  }
-    /* Text Formatter Stolen From https://github.com/Nyxiis/selfbot/blob/master/index.js */
-    /* SpongeBob Mock Below */
+    /* Text Formatter Stolen From https://github.com/Nyxiis/selfbot/blob/master/index.js b Mock Below */
   if (message.content.startsWith('>leet ')) { /* SpongeBob Mock */
     upper(message, message.content.split(' ').slice(1).join(' '));
     console.log(chalk.yellow(Time) + chalk.green('Exectued Meme Text'));
@@ -194,16 +133,12 @@ client.on('message', message => {
     })
       .then(messages => {
         let msg_array = messages.array();
-        // filter the message to only your own
         msg_array = msg_array.filter(m => m.author.id === client.user.id);
-        // limit to the requested number + 1 for the command message
         msg_array.length = messagecount + 1;
-        // Has to delete messages individually. Cannot use `deleteMessages()` on selfbots.
         msg_array.map(m => m.delete().catch(console.error));
         console.log(chalk.yellow(Time) + chalk.green('Prune\'d ' + chalk.magenta(params)));
       });
   }
-});
 
 function upper(message, suffix) {
   suffix = suffix.toLowerCase();
