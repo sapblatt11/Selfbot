@@ -8,9 +8,6 @@ const Time = moment().format('MMM D| h:mm:ss | ');
 const chalk = require('chalk');
 const lmgtfy = require('lmgtfy');
 
-const sql = require('sqlite');
-sql.open('./mlog.sqlite');
-
 const urban = require('relevant-urban');
 
 const clean = text => {
@@ -26,6 +23,7 @@ client.on('ready', () => {
   console.log(chalk.cyan(Time + chalk.green('Selfbot is Online')));
 });
 
+client.on('message', (message) => {
   if (message.author.id !== client.user.id) { /* Only my usage */
     return;
   }
@@ -71,12 +69,12 @@ message.channel.fetchMessage(margs[1]).then(r => {console.log(r.content)
     let pop = args.join(' ');
     let op = urban(pop).then(m => {
       const embed = {
-        title: pop,
+        title: 'Urban Dictionary Definition : ' + pop,
         description: '```css\n' + m.definition + '```',
         color: 8624466
       };
       message.edit({embed});
-      console.log(chalk.yellow(Time) + chalk.green('Found ' + Number(chalk.magenta(args)) + 'in Urban Dict.'));
+      console.log(chalk.yellow(Time) + chalk.green('Found ' + (chalk.magenta(pop)) + ' in Urban Dict.'));
     });
   }
   if (message.content === '>tflip') {
@@ -163,3 +161,4 @@ function upper(message, suffix) {
     }
   }
 }
+});
